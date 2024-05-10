@@ -2,8 +2,8 @@ package HashTable
 
 import (
 	"cmp"
+	"fmt"
 	"hash/fnv"
-	"unsafe"
 )
 
 type TableItem[K cmp.Ordered, V any] struct {
@@ -38,7 +38,8 @@ func (table *HashTable[K, V]) Get(key K) (V, bool) {
 		}
 		current = current.next
 	}
-	return 0, false
+	var t V
+	return t, false
 }
 
 func (table *HashTable[K, V]) Set(key K, value V) bool {
@@ -76,7 +77,6 @@ func (table *HashTable[K, V]) Remove(key K) bool {
 
 func generateHash[K any](s K) uint8 {
 	hash := fnv.New32a()
-	b := unsafe.Slice(&s, unsafe.Sizeof(s))
-	hash.Write(b)
+	hash.Write([]byte(fmt.Sprint(s)))
 	return uint8(hash.Sum32() % 256)
 }

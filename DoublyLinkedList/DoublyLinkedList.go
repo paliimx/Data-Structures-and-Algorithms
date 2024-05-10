@@ -113,8 +113,9 @@ func (list *LinkedList[T]) GetFirst() (T, bool) {
 }
 
 func (list *LinkedList[T]) GetLast() (T, bool) {
+	var t T
 	if list.head == nil {
-		return 0, false
+		return t, false
 	}
 	current := list.head
 	for current.next != nil {

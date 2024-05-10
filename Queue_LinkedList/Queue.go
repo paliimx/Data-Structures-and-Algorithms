@@ -40,9 +40,10 @@ func (list *Queue[T]) Dequeue() (T, bool) {
 	}
 }
 
-func (list *Queue[t]) Peek() (T, bool) {
+func (list *Queue[T]) Peek() (T, bool) {
+	var t T
 	if list.rear == nil {
-		return 0, false
+		return t, false
 	}
 	return list.rear.data, true
 }
