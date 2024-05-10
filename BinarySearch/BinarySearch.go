@@ -1,17 +1,19 @@
 package BinarySearch
 
-func BinarySearch(array []int, number int) int {
+import "cmp"
+
+func BinarySearch[T cmp.Ordered](array []T, value T) int {
 	minIndex := 0
 	maxIndex := len(array) - 1
 	for minIndex <= maxIndex {
-		midIndex := int((maxIndex + minIndex) / 2)
+		midIndex := (maxIndex + minIndex) / 2
 		midItem := array[midIndex]
-		if number == midItem {
+		if value == midItem {
 			return midIndex
 		}
-		if midItem < number {
+		if cmp.Less(midItem, value) {
 			minIndex = midIndex + 1
-		} else if midItem > number {
+		} else {
 			maxIndex = midIndex - 1
 		}
 	}

@@ -1,11 +1,13 @@
 package SelectionSort
 
-func SelectionSort(array []int) {
+import "cmp"
+
+func SelectionSort[T cmp.Ordered](array []T) {
 	for arrayIndex := range array {
 		minValue := array[arrayIndex]
 		minIndex := arrayIndex
 		for subArrayIndex := arrayIndex + 1; subArrayIndex < len(array); subArrayIndex++ {
-			if array[subArrayIndex] < minValue {
+			if cmp.Compare(array[subArrayIndex], minValue) == -1 {
 				minValue = array[subArrayIndex]
 				minIndex = subArrayIndex
 			}

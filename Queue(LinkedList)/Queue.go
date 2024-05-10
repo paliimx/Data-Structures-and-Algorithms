@@ -1,25 +1,28 @@
 package QueueLinkedList
 
-type Node struct {
-	data int
-	next *Node
+import "cmp"
+
+type Node[T cmp.Ordered] struct {
+	data T
+	next *Node[T]
 }
 
-type Queue struct {
-	rear *Node
+type Queue[T cmp.Ordered] struct {
+	rear *Node[T]
 }
 
-func (list *Queue) Enqueue(i int) {
-	data := &Node{data: i}
+func (list *Queue[T]) Enqueue(i T) {
+	data := &Node[T]{data: i}
 	if list.rear != nil {
 		data.next = list.rear
 	}
 	list.rear = data
 }
 
-func (list *Queue) Dequeue() (int, bool) {
+func (list *Queue[T]) Dequeue() (T, bool) {
+	var t T
 	if list.rear == nil {
-		return 0, false
+		return t, false
 	}
 	if list.rear.next == nil {
 		i := list.rear.data
@@ -37,15 +40,15 @@ func (list *Queue) Dequeue() (int, bool) {
 	}
 }
 
-func (list *Queue) Peek() (int, bool) {
+func (list *Queue[t]) Peek() (T, bool) {
 	if list.rear == nil {
 		return 0, false
 	}
 	return list.rear.data, true
 }
 
-func (list *Queue) Get() []int {
-	var items []int
+func (list *Queue[T]) Get() []T {
+	var items []T
 	current := list.rear
 	for current != nil {
 		items = append(items, current.data)
@@ -54,10 +57,10 @@ func (list *Queue) Get() []int {
 	return items
 }
 
-func (list *Queue) IsEmpty() bool {
+func (list *Queue[T]) IsEmpty() bool {
 	return list.rear == nil
 }
 
-func (list *Queue) Empty() {
+func (list *Queue[T]) Empty() {
 	list.rear = nil
 }

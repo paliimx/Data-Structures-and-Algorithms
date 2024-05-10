@@ -1,6 +1,6 @@
 package ReverseArray
 
-func ReverseArray(a []int) {
+func ReverseArray[T any](a []T) {
 	i := 0
 	u := len(a) - 1
 	for i < u {

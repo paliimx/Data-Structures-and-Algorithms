@@ -1,6 +1,8 @@
 package CombSort
 
-func CombSort(array []int) {
+import "cmp"
+
+func CombSort[T cmp.Ordered](array []T) {
 	gapValue := len(array)
 	swapCount := 1
 	for gapValue >= 1 && swapCount != 0 {
@@ -11,7 +13,7 @@ func CombSort(array []int) {
 		firstItem := 0
 		secondItem := gapValue
 		for secondItem != len(array) {
-			if array[firstItem] > array[secondItem] {
+			if cmp.Compare(array[firstItem], array[secondItem]) == 1 {
 				array[firstItem], array[secondItem] = array[secondItem], array[firstItem]
 				swapCount += 1
 			}

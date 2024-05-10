@@ -1,8 +1,10 @@
 package LinearSearch
 
-func LinearSearch(array []int, number int) int {
+import "cmp"
+
+func LinearSearch[T cmp.Ordered](array []T, number T) int {
 	for index, value := range array {
-		if value == number {
+		if cmp.Compare(value, number) == 0 {
 			return index
 		}
 	}

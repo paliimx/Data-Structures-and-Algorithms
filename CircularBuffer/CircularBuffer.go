@@ -2,12 +2,12 @@ package CircularBuffer
 
 const arraySize = 10
 
-type CircularBuffer struct {
-	data    [arraySize]int
+type CircularBuffer[T any] struct {
+	data    [arraySize]T
 	pointer int
 }
 
-func (b *CircularBuffer) InsertValue(i int) {
+func (b *CircularBuffer[T]) InsertValue(i T) {
 	if b.pointer == len(b.data) {
 		b.pointer = 0
 	}
@@ -15,12 +15,12 @@ func (b *CircularBuffer) InsertValue(i int) {
 	b.pointer += 1
 }
 
-func (b *CircularBuffer) GetValues() [arraySize]int {
+func (b *CircularBuffer[T]) GetValues() [arraySize]T {
 	return b.data
 }
 
-func (b *CircularBuffer) GetValuesFromPosition(i int) ([arraySize]int, bool) {
-	var out [arraySize]int
+func (b *CircularBuffer[T]) GetValuesFromPosition(i int) ([arraySize]T, bool) {
+	var out [arraySize]T
 
 	if i >= len(out) {
 		return out, false

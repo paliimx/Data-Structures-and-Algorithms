@@ -1,26 +1,26 @@
 package Trie
 
-type Node struct {
+type Node[T any] struct {
 	last     bool
-	parent   *Node
-	children map[int32]*Node
+	parent   *Node[T]
+	children map[int32]*Node[T]
 }
 
-type Trie struct {
-	root *Node
+type Trie[T any] struct {
+	root *Node[T]
 }
 
-func (trie *Trie) Init() {
-	trie.root = &Node{children: map[int32]*Node{}}
+func (trie *Trie[T]) Init() {
+	trie.root = &Node[T]{children: map[int32]*Node[T]{}}
 }
 
-func (trie Trie) Add(item string) {
+func (trie Trie[T]) Add(item string) {
 	currentNode := trie.root
 	for _, r := range item {
 		if _, ok := currentNode.children[r]; ok {
 			currentNode = currentNode.children[r]
 		} else {
-			node := &Node{children: map[int32]*Node{}, parent: currentNode}
+			node := &Node[T]{children: map[int32]*Node[T]{}, parent: currentNode}
 			currentNode.children[r] = node
 			currentNode = node
 		}
@@ -28,7 +28,7 @@ func (trie Trie) Add(item string) {
 	currentNode.last = true
 }
 
-func (trie Trie) Search(item string) bool {
+func (trie Trie[T]) Search(item string) bool {
 	currentNode := trie.root
 	for _, r := range item {
 		if _, ok := currentNode.children[r]; ok {
@@ -43,7 +43,7 @@ func (trie Trie) Search(item string) bool {
 	return true
 }
 
-func (trie Trie) Remove(item string) bool {
+func (trie Trie[T]) Remove(item string) bool {
 	currentNode := trie.root
 	for _, r := range item {
 		if _, ok := currentNode.children[r]; ok {
