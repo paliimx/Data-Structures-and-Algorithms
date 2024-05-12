@@ -1,7 +1,9 @@
 package MergeSort
 
-func mergeParts(array []int, leftIndex, divideIndex, rightIndex int) {
-	var tempArray1, tempArray2 []int
+import "cmp"
+
+func mergeParts[T cmp.Ordered](array []T, leftIndex, divideIndex, rightIndex int) {
+	var tempArray1, tempArray2 []T
 	for i := leftIndex; i <= divideIndex; i++ {
 		tempArray1 = append(tempArray1, array[i])
 	}
@@ -34,7 +36,7 @@ func mergeParts(array []int, leftIndex, divideIndex, rightIndex int) {
 	}
 }
 
-func MergeSort(array []int, leftIndex, rightIndex int) {
+func MergeSort[T cmp.Ordered](array []T, leftIndex, rightIndex int) {
 	if leftIndex >= rightIndex {
 		return
 	}

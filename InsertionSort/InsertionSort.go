@@ -1,8 +1,10 @@
 package InsertionSort
 
-func InsertionSort(array []int) {
+import "cmp"
+
+func InsertionSort[T cmp.Ordered](array []T) {
 	for itemIndex, itemValue := range array {
-		for itemIndex != 0 && array[itemIndex-1] > itemValue {
+		for itemIndex != 0 && cmp.Compare(array[itemIndex-1], itemValue) == 1 {
 			array[itemIndex] = array[itemIndex-1]
 			itemIndex -= 1
 		}

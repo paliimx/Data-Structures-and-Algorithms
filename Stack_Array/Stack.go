@@ -1,13 +1,15 @@
 package StackArray
 
+import "cmp"
+
 const arraySize = 10
 
-type Stack struct {
+type Stack[T cmp.Ordered] struct {
 	top  int
-	data [arraySize]int
+	data [arraySize]T
 }
 
-func (s *Stack) Push(i int) bool {
+func (s *Stack[T]) Push(i T) bool {
 	if s.top == len(s.data) {
 		return false
 	}
@@ -16,27 +18,28 @@ func (s *Stack) Push(i int) bool {
 	return true
 }
 
-func (s *Stack) Pop() (int, bool) {
+func (s *Stack[T]) Pop() (T, bool) {
+	var t T
 	if s.top == 0 {
-		return 0, false
+		return t, false
 	}
 	i := s.data[s.top-1]
 	s.top -= 1
 	return i, true
 }
 
-func (s *Stack) Peek() int {
+func (s *Stack[T]) Peek() T {
 	return s.data[s.top-1]
 }
 
-func (s *Stack) Get() []int {
+func (s *Stack[T]) Get() []T {
 	return s.data[:s.top]
 }
 
-func (s *Stack) IsEmpty() bool {
+func (s *Stack[T]) IsEmpty() bool {
 	return s.top == 0
 }
 
-func (s *Stack) Empty() {
+func (s *Stack[T]) Empty() {
 	s.top = 0
 }

@@ -1,47 +1,52 @@
 package HashTable
 
-import "hash/fnv"
+import (
+	"cmp"
+	"fmt"
+	"hash/fnv"
+)
 
-type TableItem struct {
-	key  string
-	data int
-	next *TableItem
+type TableItem[K cmp.Ordered, V any] struct {
+	key  K
+	data V
+	next *TableItem[K, V]
 }
 
-type HashTable struct {
-	data [256]*TableItem
+type HashTable[K cmp.Ordered, V any] struct {
+	data [256]*TableItem[K, V]
 }
 
-func (table *HashTable) Add(key string, i int) {
+func (table *HashTable[K, V]) Add(key K, i V) {
 	position := generateHash(key)
 	if table.data[position] == nil {
-		table.data[position] = &TableItem{key: key, data: i}
+		table.data[position] = &TableItem[K, V]{key: key, data: i}
 		return
 	}
 	current := table.data[position]
 	for current.next != nil {
 		current = current.next
 	}
-	current.next = &TableItem{key: key, data: i}
+	current.next = &TableItem[K, V]{key: key, data: i}
 }
 
-func (table *HashTable) Get(key string) (int, bool) {
+func (table *HashTable[K, V]) Get(key K) (V, bool) {
 	position := generateHash(key)
 	current := table.data[position]
 	for current != nil {
-		if current.key == key {
+		if cmp.Compare(current.key, key) == 0 {
 			return current.data, true
 		}
 		current = current.next
 	}
-	return 0, false
+	var t V
+	return t, false
 }
 
-func (table *HashTable) Set(key string, value int) bool {
+func (table *HashTable[K, V]) Set(key K, value V) bool {
 	position := generateHash(key)
 	current := table.data[position]
 	for current != nil {
-		if current.key == key {
+		if cmp.Compare(current.key, key) == 0 {
 			current.data = value
 			return true
 		}
@@ -50,18 +55,18 @@ func (table *HashTable) Set(key string, value int) bool {
 	return false
 }
 
-func (table *HashTable) Remove(key string) bool {
+func (table *HashTable[K, V]) Remove(key K) bool {
 	position := generateHash(key)
 	if table.data[position] == nil {
 		return false
 	}
-	if table.data[position].key == key {
+	if cmp.Compare(table.data[position].key, key) == 0 {
 		table.data[position] = table.data[position].next
 		return true
 	}
 	current := table.data[position]
 	for current.next != nil {
-		if current.next.key == key {
+		if cmp.Compare(current.next.key, key) == 0 {
 			current.next = current.next.next
 			return true
 		}
@@ -70,8 +75,8 @@ func (table *HashTable) Remove(key string) bool {
 	return false
 }
 
-func generateHash(s string) uint8 {
+func generateHash[K any](s K) uint8 {
 	hash := fnv.New32a()
-	hash.Write([]byte(s))
+	hash.Write([]byte(fmt.Sprint(s)))
 	return uint8(hash.Sum32() % 256)
 }

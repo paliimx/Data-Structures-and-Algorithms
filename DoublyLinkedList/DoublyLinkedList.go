@@ -1,18 +1,20 @@
 package DoublyLinkedList
 
-type Node struct {
-	data int
-	next *Node
-	prev *Node
+import "cmp"
+
+type Node[T cmp.Ordered] struct {
+	data T
+	next *Node[T]
+	prev *Node[T]
 }
 
-type LinkedList struct {
-	head *Node
-	tail *Node
+type LinkedList[T cmp.Ordered] struct {
+	head *Node[T]
+	tail *Node[T]
 }
 
-func (list *LinkedList) InsertFirst(i int) {
-	data := &Node{data: i}
+func (list *LinkedList[T]) InsertFirst(i T) {
+	data := &Node[T]{data: i}
 	if list.head != nil {
 		list.head.prev = data
 		data.next = list.head
@@ -20,8 +22,8 @@ func (list *LinkedList) InsertFirst(i int) {
 	list.head = data
 }
 
-func (list *LinkedList) InsertLast(i int) {
-	data := &Node{data: i}
+func (list *LinkedList[T]) InsertLast(i T) {
+	data := &Node[T]{data: i}
 	if list.head == nil {
 		list.head = data
 		list.tail = data
@@ -34,23 +36,23 @@ func (list *LinkedList) InsertLast(i int) {
 	list.tail = data
 }
 
-func (list *LinkedList) RemoveByValue(i int) bool {
+func (list *LinkedList[T]) RemoveByValue(i T) bool {
 	if list.head == nil {
 		return false
 	}
-	if list.head.data == i {
+	if cmp.Compare(list.head.data, i) == 0 {
 		list.head = list.head.next
 		list.head.prev = nil
 		return true
 	}
-	if list.tail.data == i {
+	if cmp.Compare(list.tail.data, i) == 0 {
 		list.tail = list.tail.prev
 		list.tail.next = nil
 		return true
 	}
 	current := list.head
 	for current.next != nil {
-		if current.next.data == i {
+		if cmp.Compare(current.next.data, i) == 0 {
 			if current.next.next != nil {
 				current.next.next.prev = current
 			}
@@ -62,7 +64,7 @@ func (list *LinkedList) RemoveByValue(i int) bool {
 	return false
 }
 
-func (list *LinkedList) RemoveByIndex(i int) bool {
+func (list *LinkedList[T]) RemoveByIndex(i int) bool {
 	if list.head == nil {
 		return false
 	}
@@ -88,13 +90,13 @@ func (list *LinkedList) RemoveByIndex(i int) bool {
 	return true
 }
 
-func (list *LinkedList) SearchValue(i int) bool {
+func (list *LinkedList[T]) SearchValue(i T) bool {
 	if list.head == nil {
 		return false
 	}
 	current := list.head
 	for current != nil {
-		if current.data == i {
+		if cmp.Compare(current.data, i) == 0 {
 			return true
 		}
 		current = current.next
@@ -102,16 +104,18 @@ func (list *LinkedList) SearchValue(i int) bool {
 	return false
 }
 
-func (list *LinkedList) GetFirst() (int, bool) {
+func (list *LinkedList[T]) GetFirst() (T, bool) {
+	var t T
 	if list.head == nil {
-		return 0, false
+		return t, false
 	}
 	return list.head.data, true
 }
 
-func (list *LinkedList) GetLast() (int, bool) {
+func (list *LinkedList[T]) GetLast() (T, bool) {
+	var t T
 	if list.head == nil {
-		return 0, false
+		return t, false
 	}
 	current := list.head
 	for current.next != nil {
@@ -120,7 +124,7 @@ func (list *LinkedList) GetLast() (int, bool) {
 	return current.data, true
 }
 
-func (list *LinkedList) GetSize() int {
+func (list *LinkedList[T]) GetSize() int {
 	count := 0
 	current := list.head
 	for current != nil {
@@ -131,8 +135,8 @@ func (list *LinkedList) GetSize() int {
 	return count
 }
 
-func (list *LinkedList) GetItemsFromStart() []int {
-	var items []int
+func (list *LinkedList[T]) GetItemsFromStart() []T {
+	var items []T
 	current := list.head
 	for current != nil {
 		items = append(items, current.data)
@@ -141,8 +145,8 @@ func (list *LinkedList) GetItemsFromStart() []int {
 	return items
 }
 
-func (list *LinkedList) GetItemsFromEnd() []int {
-	var items []int
+func (list *LinkedList[T]) GetItemsFromEnd() []T {
+	var items []T
 	current := list.tail
 	for current != nil {
 		items = append(items, current.data)
